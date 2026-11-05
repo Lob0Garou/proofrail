@@ -23,4 +23,4 @@ A camada de escopo compara protocolo, host, porta e caminho. A varredura confere
 
 Uma execução completa foi verificada no Windows com uma cópia local do replayer, uma campanha fictícia e um servidor em loopback. A verificação cobriu ingestão, execução de uma spec, leitura do resultado e geração do rascunho. A instalação independente por terceiros continua pendente da distribuição do replayer.
 
-Distribua somente o código, a documentação e os exemplos sintéticos. Revise os direitos de redistribuição e adicione a licença escolhida pelo titular antes de tornar o repositório público.
+O ProofRail está disponível sob a [licença MIT](LICENSE). A licença do replayer distribuído separadamente deve ser verificada junto à sua fonte.
