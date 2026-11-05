@@ -1,0 +1,7 @@
+{
+  "platform": "hackerone",
+  "slug": "example-program",
+  "capturedAt": "2000-01-01T00:00:00Z",
+  "assets": [{"type":"url", "asset":"https://example.test/allowed/*"}],
+  "outOfScope": [{"type":"url", "asset":"https://example.test/allowed/admin/*"}]
+}

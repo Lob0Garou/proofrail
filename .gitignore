@@ -1,0 +1,16 @@
+/bugbounty-ops/scopes/
+/bugbounty-ops/esteira/engagements/
+/bugbounty-ops/esteira/surface/
+/bugbounty-ops/esteira/signup/
+/replayer/
+.env
+.env.*
+*.log
+*.pid
+*.jsonl
+state.json
+STATUS.md
+HEARTBEAT
+STOP
+SUBMITS/
+REPORT-*.md
