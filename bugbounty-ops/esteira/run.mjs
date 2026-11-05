@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { pathToFileURL } from 'node:url';
 import { newRunId, emptyState, saveState, loadState, appendJournal, tally, stopRequested } from './lib/state.mjs';
 import { buildQueue } from './lib/queue.mjs';
 import { classify, outcomeFromVerdict } from './lib/classify.mjs';
@@ -75,7 +76,7 @@ const log = (m) => {
 async function runEngine(specPath, scopeDir) {
   const spec = (() => { try { return JSON.parse(fs.readFileSync(specPath, 'utf8')); } catch { return {}; } })();
   try {
-    const { stdout } = await execFileAsync(process.execPath, ['--import', path.join(import.meta.dirname, 'lib', 'replay-fetch-guard.mjs'), path.join(KIT, 'scripts', 'replay.mjs'), 'run', '--spec', specPath], {
+    const { stdout } = await execFileAsync(process.execPath, ['--import', pathToFileURL(path.join(import.meta.dirname, 'lib', 'replay-fetch-guard.mjs')).href, path.join(KIT, 'scripts', 'replay.mjs'), 'run', '--spec', specPath], {
       cwd: KIT, env: { ...process.env, ESTEIRA_CAPTURED_SCOPE: path.resolve(ROOT, scopeDir, 'scope.json') }, timeout: 15 * 60 * 1000, maxBuffer: 8 * 1024 * 1024,
     });
     const m = stdout.match(/veredito:\s*([a-z-]+)/i);

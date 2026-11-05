@@ -1,5 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { fingerprint } from '../lib/sweep.mjs';
 import { candidatesFromSurface } from '../lib/deepen.mjs';
 import { classifyObservedImpact } from '../lib/impact-gate.mjs';
@@ -27,4 +32,16 @@ test('does not follow an out-of-scope redirect', async () => {
 
 test('bare successful status is not evidence of access', () => {
   assert.equal(classifyObservedImpact({ steps: [{ phase: 'attack', response: { status: 200 } }] }).access, false);
+});
+
+test('the scope guard can be preloaded by a Node subprocess', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'proofrail-preload-'));
+  const scope = path.join(dir, 'scope.json');
+  writeFileSync(scope, JSON.stringify({ capturedAt: new Date().toISOString(), assets: [{ asset: 'https://example.test/*' }] }));
+  const guard = pathToFileURL(path.resolve(import.meta.dirname, '../lib/replay-fetch-guard.mjs')).href;
+  const result = spawnSync(process.execPath, ['--import', guard, '-e', 'process.stdout.write("ready")'], {
+    encoding: 'utf8', env: { ...process.env, ESTEIRA_CAPTURED_SCOPE: scope },
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout, 'ready');
 });
